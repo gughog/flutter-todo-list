@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
         // Limpa o campo após adicionar:
         newTodoControl.text = '';
       }
+      saveToStorage();
     });
   }
 
@@ -84,6 +85,7 @@ class _HomePageState extends State<HomePage> {
   void removeTodo(int index) {
     setState(() {
       widget.items.removeAt(index);
+      saveToStorage();
     });
 
     // Mostra dialog de sucesso:
@@ -104,6 +106,7 @@ class _HomePageState extends State<HomePage> {
       widget.items.forEach((item) => {
         item.isDone = true
       });
+      saveToStorage();
     });
   }
 
@@ -113,6 +116,7 @@ class _HomePageState extends State<HomePage> {
       widget.items.forEach((item) => {
         item.isDone = false
       });
+      saveToStorage();
     });
   }
 
@@ -124,8 +128,30 @@ class _HomePageState extends State<HomePage> {
 
   // Lidando com o localStorage do 'Shared Preferences':
   // "Futures" são Promises, 'async' significa que a função é assincrona;
-  Future loadStorage() async {
+  Future loadStorageData() async {
+    var sharedPrefs = await SharedPreferences.getInstance();
+    var data = sharedPrefs.getString('data');
 
+    if (data != null) {
+      Iterable decodedData = jsonDecode(data);
+      List<Item> result = decodedData.map((item) => Item.fromJson(item)).toList();
+
+      setState(() {
+        widget.items = result;
+      });
+    }
+  }
+
+  // Salvando os dados no SharedPreferences:
+  saveToStorage() async {
+    var sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.setString('data', jsonEncode(widget.items));
+  }
+
+  // Chamamos aqui o método construtor desta classe para chamar a função
+  // De loadStorage assim que a aplicação 'montar':
+  _HomePageState() {
+    loadStorageData();
   }
 
   @override
@@ -163,6 +189,7 @@ class _HomePageState extends State<HomePage> {
                 // setState atualiza o estado (apenas em stateful widgets)
                 setState((){
                   item.isDone = value;
+                  saveToStorage();
                 });
               },
             ),
