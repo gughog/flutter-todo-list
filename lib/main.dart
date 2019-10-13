@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
+import 'dart:convert';
 import 'models/item.dart';
 
 // void main() => runApp(MyApp());
@@ -30,11 +32,7 @@ class HomePage extends StatefulWidget {
   HomePage() {
     items = [];
     // Semelhante ao Array.push() do Javascript:
-    items.add(Item(title: 'Estudar Flutter', isDone: false, unique: '1'));
-    items.add(Item(title: 'Estudar Typescript', isDone: false, unique: '2'));
-    items.add(Item(title: 'Construir Apps', isDone: true, unique: '3'));
-    items.add(Item(title: 'Jogar Civilization VI', isDone: true, unique: '4'));
-    items.add(Item(title: 'Tocar Guitarra', isDone: true, unique: '5'));
+    // items.add(Item(title: 'Estudar Flutter', isDone: false, unique: '1'));
   }
 
   @override
@@ -124,13 +122,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Lidando com o localStorage do 'Shared Preferences':
+  // "Futures" são Promises, 'async' significa que a função é assincrona;
+  Future loadStorage() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffold representa uma página
     return Scaffold(
       // Adicionando uma barra com texto no topo:
       appBar: AppBar(
-        title: Text('Awesome Todo List'),
+        title: Text('Lista de Tarefas'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check_box),
