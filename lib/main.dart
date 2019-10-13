@@ -100,6 +100,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Marcar todos como "feito":
+  void allDone() {
+    setState(() {
+      widget.items.forEach((item) => {
+        item.isDone = true
+      });
+    });
+  }
+
+  // Desmarcar todos os itens:
+  void undoAll() {
+    setState(() {
+      widget.items.forEach((item) => {
+        item.isDone = false
+      });
+    });
+  }
+
   void clearInput() {
     setState(() {
       newTodoControl.text = '';
@@ -122,7 +140,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.indeterminate_check_box),
             color: Colors.white,
-            onPressed: unDoneAll,
+            onPressed: undoAll,
           )
         ],
       ),
@@ -171,6 +189,9 @@ class _HomePageState extends State<HomePage> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               hintText: 'Adicione um novo item...',
+              hintStyle: TextStyle(
+                color: Colors.white,
+              ),
               contentPadding: const EdgeInsets.all(10),
               filled: true,
               fillColor: Colors.red,
