@@ -82,6 +82,24 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Método para remover os itens:
+  void removeTodo(int index) {
+    setState(() {
+      widget.items.removeAt(index);
+    });
+
+    // Mostra dialog de sucesso:
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('Item removido!'),
+          content: Text('O item foi removido com sucesso.'),
+        );
+      }
+    );
+  }
+
   void clearInput() {
     setState(() {
       newTodoControl.text = '';
@@ -95,6 +113,18 @@ class _HomePageState extends State<HomePage> {
       // Adicionando uma barra com texto no topo:
       appBar: AppBar(
         title: Text('Awesome Todo List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.check_box),
+            color: Colors.white,
+            onPressed: allDone,
+          ),
+          IconButton(
+            icon: Icon(Icons.indeterminate_check_box),
+            color: Colors.white,
+            onPressed: unDoneAll,
+          )
+        ],
       ),
 
       // Corpo da lista:
@@ -126,7 +156,7 @@ class _HomePageState extends State<HomePage> {
             ),
             onDismissed: (direction) {
               // Aqui podemos tratar ações para caso arrastar pra esquerda ou direita;
-              
+              removeTodo(index);
             },
           );
         },
